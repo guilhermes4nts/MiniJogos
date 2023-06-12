@@ -7,6 +7,7 @@ import java.util.Objects;
 
 public class JogoDaVelha extends JFrame{
 
+    // Declaracao de variáveis, constantes e objetos
     ImageIcon iconCirculo = new ImageIcon("circulo.png");
     ImageIcon iconXis = new ImageIcon("xis.png");
 
@@ -60,7 +61,6 @@ public class JogoDaVelha extends JFrame{
             lInformacao.setForeground(new Color(64,0,211));
         }
     }
-
     public boolean testeVitoria(int jog){
         if (blocos[0].quem==jog && blocos[1].quem==jog && blocos[2].quem==jog){
             return true;
@@ -93,6 +93,7 @@ public class JogoDaVelha extends JFrame{
 		new JogoDaVelha();
 	}
 
+    // Classe Botao
     public class Bloco extends JButton{
         int quem = 0;
         public Bloco(){
@@ -106,12 +107,14 @@ public class JogoDaVelha extends JFrame{
                         setIcon(iconCirculo);
                         quem = JOGADOR_2;
                     }
+                    // Verificando se Há um vencedor
                     if(rodadas >= 5){
                         if (testeVitoria(quem)) {
                             JOptionPane.showMessageDialog(null, "Jogador " + quem + " VENCEU!!");
                             System.exit(0);
                         }
                     }
+                    //Verificando se empatou
                     if (rodadas == 9){
                         JOptionPane.showMessageDialog(null, "DEU VELHA!!");
                         System.exit(0);
