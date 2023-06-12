@@ -7,6 +7,7 @@ import java.util.Objects;
 
 public class JogoDaVelha extends JFrame{
 
+    // Declaracao de variáveis, constantes e objetos
     ImageIcon iconCirculo = new ImageIcon("circulo.png");
     ImageIcon iconXis = new ImageIcon("xis.png");
 
@@ -15,10 +16,12 @@ public class JogoDaVelha extends JFrame{
     Bloco[] blocos = new Bloco[9];
 
     final int JOGADOR_1 = 1;
-    final int JOGADOR_2 = 2;
+    final int JOGADOR_2 = 2; 
     int rodadas = 1;
     int jogadorVez = JOGADOR_1;
+    int jog1 = 0, jog2 = 0;
     JLabel lInformacao = new JLabel("Jogador "+JOGADOR_1);
+    JLabel placar = new JLabel("Placar: "+jog1+"x"+jog2);
 
 	public JogoDaVelha() {
         configurarTela();
@@ -27,11 +30,15 @@ public class JogoDaVelha extends JFrame{
 
     public void configurarTela(){
         add(BorderLayout.CENTER,pTela);
+        add(BorderLayout.SOUTH,placar);
         add(BorderLayout.NORTH,lInformacao);
-        pTela.setBackground(Color.darkGray);
+        pTela.setBackground(Color.gray);
         lInformacao.setFont(new Font("Arial", Font.BOLD, 27));
-        lInformacao.setForeground(new Color(64,0,211));
+        lInformacao.setForeground(new Color(0,0,205));
         lInformacao.setHorizontalAlignment(SwingConstants.CENTER);
+        placar.setHorizontalAlignment(SwingConstants.CENTER);
+        placar.setFont(new Font("Arial", Font.BOLD, 20));
+        placar.setForeground(new Color(22,22,22));
 
         for (int i = 0; i < 9; i++){
             Bloco bloco = new Bloco();
@@ -47,6 +54,7 @@ public class JogoDaVelha extends JFrame{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setVisible(true);
+        getContentPane().setBackground(Color.gray);
 	}
 
     public void mudarVez(){
@@ -60,7 +68,6 @@ public class JogoDaVelha extends JFrame{
             lInformacao.setForeground(new Color(64,0,211));
         }
     }
-
     public boolean testeVitoria(int jog){
         if (blocos[0].quem==jog && blocos[1].quem==jog && blocos[2].quem==jog){
             return true;
@@ -90,9 +97,10 @@ public class JogoDaVelha extends JFrame{
     }
 
 	public static void main(String[] args) {
-		new JogoDaVelha();
+        new JogoDaVelha();
 	}
 
+    // Classe Botao
     public class Bloco extends JButton{
         int quem = 0;
         public Bloco(){
@@ -106,15 +114,44 @@ public class JogoDaVelha extends JFrame{
                         setIcon(iconCirculo);
                         quem = JOGADOR_2;
                     }
+                    // Verificando se Há um vencedor
                     if(rodadas >= 5){
                         if (testeVitoria(quem)) {
                             JOptionPane.showMessageDialog(null, "Jogador " + quem + " VENCEU!!");
-                            System.exit(0);
+                            // Recomecando o jogo da velha, loop
+                            if(quem == 1){
+                                jog1++;
+                                placar.setText("Placar: "+jog1+"x"+jog2);
+                            }else{
+                                jog2++;
+                                placar.setText("Placar: "+jog1+"x"+jog2);
+                            }
+                            for (int i = 0; i < 9; i++){
+                                pTela.remove(blocos[i]);
+                            }
+                            for (int i = 0; i < 9; i++){
+                                Bloco bloco = new Bloco();
+                                blocos[i] = bloco;
+                                pTela.add(blocos[i]);
+                            }
+                            rodadas = 0;
+
+
                         }
                     }
+                    //Verificando se empatou
                     if (rodadas == 9){
                         JOptionPane.showMessageDialog(null, "DEU VELHA!!");
-                        System.exit(0);
+                        // Recomecando o jogo da velha, loop
+                        for (int i = 0; i < 9; i++){
+                            pTela.remove(blocos[i]);
+                        }
+                        for (int i = 0; i < 9; i++){
+                            Bloco bloco = new Bloco();
+                            blocos[i] = bloco;
+                            pTela.add(blocos[i]);
+                        }
+                        rodadas = 0;
                     }
                     rodadas++;
                     mudarVez();
